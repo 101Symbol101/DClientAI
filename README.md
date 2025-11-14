@@ -1,1 +1,1 @@
-Launch an html server on either your local ipv4 or 127.0.0.1:8080 using autohotkeyv2 in a way-too-overcomplicated method.
+Launch an html server on either your local(:8080 only right now) using autohotkeyv2 in a way-too-overcomplicated method.
