@@ -4,13 +4,18 @@
 1. [Overview](#overview)
 2. [Project Structure](#project-structure)
 3. [Module 0 (Main) - DClient Hub](#module-0-main---dclient-hub)
-4. [Module 11 (Errors) - Centralized Error Logging](#module-11-errors---centralized-error-logging)
-5. [Module 12 (HTML) - HTML Editor](#module-12-html---html-editor)
-6. [Module 13 (Webserve) - Web Server Control Panel](#module-13-webserve---web-server-control-panel)
-7. [File Dependencies](#file-dependencies)
-8. [Configuration Files](#configuration-files)
-9. [Usage Instructions](#usage-instructions)
-10. [Technical Details](#technical-details)
+4. [Module 1 (Developer Only!) - Developer Module](#module-1-developer-only---developer-module)
+5. [Module 3 (CSS) - CSS Editor](#module-3-css---css-editor)
+6. [Module 4 (JS) - JavaScript Editor](#module-4-js---javascript-editor)
+7. [Module 6 (Config) - Configuration Manager](#module-6-config---configuration-manager)
+8. [Module 10 (Backup) - Backup Manager](#module-10-backup---backup-manager)
+9. [Module 11 (Errors) - Centralized Error Logging](#module-11-errors---centralized-error-logging)
+10. [Module 12 (HTML) - HTML Editor](#module-12-html---html-editor)
+11. [Module 13 (Webserve) - Web Server Control Panel](#module-13-webserve---web-server-control-panel)
+12. [File Dependencies](#file-dependencies)
+13. [Configuration Files](#configuration-files)
+14. [Usage Instructions](#usage-instructions)
+15. [Technical Details](#technical-details)
 
 ---
 
@@ -20,9 +25,11 @@ DClient is a modular AutoHotkey v2.0 application suite designed for web developm
 
 ### Key Features
 - **Central Hub**: Single entry point for all DClient components
-- **HTML Editor**: Visual HTML editing with validation and history tracking
+- **Code Editors**: HTML, CSS, and JavaScript editors with validation and history tracking
 - **Web Server**: Built-in HTTP server for local development
 - **Error Logging**: Centralized error and message tracking system
+- **Configuration Management**: Centralized settings viewer and import/export
+- **Backup System**: Backup and restore configuration files
 - **Modular Architecture**: Each module operates independently but integrates seamlessly
 
 ---
@@ -35,6 +42,36 @@ DClient/
 │   ├── DClientHub.ahk          # Main hub GUI
 │   ├── Start.bat                # Launcher script
 │   └── DOCUMENTATION.md         # This file
+│
+├── Module 1 (Developer Only!)/
+│   ├── DeveloperModule.ahk     # Password-protected developer module
+│   ├── GeneratePasswordHash.ahk # Password hash generator tool
+│   ├── StartDeveloperModule.bat # Launcher for developer module
+│   ├── StartHashGenerator.bat  # Launcher for hash generator
+│   └── README.md                # Developer module documentation
+│
+├── Module 2 (INFO)/
+│   └── DOCUMENTATION.md         # Complete documentation
+│
+├── Module 3 (CSS)/
+│   ├── CSSEditor.ahk            # CSS editor GUI
+│   ├── StartCSSEditor.bat       # Launcher for CSS editor
+│   └── data/                    # CSS edit history (timestamped files)
+│
+├── Module 4 (JS)/
+│   ├── JSEditor.ahk             # JavaScript editor GUI
+│   ├── StartJSEditor.bat        # Launcher for JS editor
+│   └── data/                    # JS edit history (timestamped files)
+│
+├── Module 6 (Config)/
+│   ├── ConfigManager.ahk         # Configuration manager GUI
+│   ├── StartConfigManager.bat   # Launcher for config manager
+│   └── config/                  # Config manager settings
+│
+├── Module 10 (Backup)/
+│   ├── BackupManager.ahk         # Backup manager GUI
+│   ├── StartBackupManager.bat   # Launcher for backup manager
+│   └── backups/                 # Backup storage directory
 │
 ├── Module 11 (Errors)/
 │   ├── ErrorLogger.ahk          # Centralized logging system
@@ -56,6 +93,8 @@ DClient/
         └── image_assets/
             └── Styles/          # UI skinning assets
 ```
+**Quick Note**
+This Section (modules 1-15) create files like config files that are not displayed in this diagram.
 
 ---
 
@@ -72,16 +111,21 @@ The DClient Hub serves as the central control panel for launching and managing a
 **Features**:
 - **Launch Buttons**: 
   - HTML Editor - Opens the HTML editor module
+  - CSS Editor - Opens the CSS editor module
+  - JavaScript Editor - Opens the JavaScript editor module
   - Web Server Control - Opens the web server control panel
   - View Logs - Opens the Module 13 log file in Notepad
   - Error Viewer - Opens the centralized error viewer
+  - Developer Module - Opens the password-protected developer module
+  - Config Manager - Opens the configuration manager
+  - Backup Manager - Opens the backup manager
 - **Always On Top**: Checkbox to keep hub window above other windows
 - **Close All**: When hub closes, it automatically closes all other open DClient windows
 - **Settings Persistence**: Always On Top preference saved to `hub_settings.ini`
 
 **Window Properties**:
 - Width: 400px
-- Height: 550px
+- Height: 750px
 - Dark theme with custom skinning
 - Draggable title bar
 
@@ -106,6 +150,469 @@ The DClient Hub serves as the central control panel for launching and managing a
 4. Shows error message if AutoHotkey cannot be found
 
 **Usage**: Double-click `Start.bat` to launch DClient Hub
+
+---
+
+## Module 1 (Developer Only!) - Developer Module
+
+### Purpose
+Module 1 provides a password-protected area restricted to developers only. This module requires authentication before access is granted.
+
+### Files
+
+#### `DeveloperModule.ahk`
+**Purpose**: Password-protected developer module GUI application
+
+**Features**:
+- **Password Protection**: Requires password entry before access
+- **Password Prompt**: GUI dialog for password entry
+- **Access Control**: Only grants access if password matches stored hash
+- **Developer Interface**: Placeholder interface for developer tools and features
+
+**Window Properties**:
+- Width: 400px (password prompt), 400px (main module)
+- Height: 300px (password prompt), 300px (main module)
+- Dark theme with custom skinning
+- Draggable title bar
+
+**Password System**:
+- Password stored as SHA-256 hash in code
+- Password never stored in plain text
+- Hash comparison for authentication
+- Error message displayed on incorrect password
+
+**Dependencies**:
+- `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
+- `Module 13 (Webserve)/subscripts/image_assets/Styles/` - UI skinning assets
+
+#### `GeneratePasswordHash.ahk`
+**Purpose**: Helper tool to generate password hashes for use in DeveloperModule.ahk
+
+**Features**:
+- **Password Input**: Secure password entry field
+- **Hash Generation**: Generates SHA-256 hash of entered password
+- **Hash Display**: Shows generated hash in read-only text field
+- **Clipboard Copy**: Copies hash to clipboard for easy pasting
+
+**Window Properties**:
+- Width: 400px
+- Height: 400px
+- Dark theme with custom skinning
+- Draggable title bar
+
+**Usage**:
+1. Enter desired password
+2. Click "Generate Hash"
+3. Copy hash from output field
+4. Paste hash into DeveloperModule.ahk as PASSWORD_HASH value
+
+#### `StartDeveloperModule.bat`
+**Purpose**: Batch launcher script for DeveloperModule.ahk
+
+**Functionality**: Same as Start.bat but launches DeveloperModule.ahk instead
+
+#### `StartHashGenerator.bat`
+**Purpose**: Batch launcher script for GeneratePasswordHash.ahk
+
+**Functionality**: Same as Start.bat but launches GeneratePasswordHash.ahk instead
+
+#### `README.md`
+**Purpose**: Documentation for the developer module
+
+**Content**: Setup instructions, security information, and usage guide
+
+### Security Model
+
+**Protection Level**:
+- Prevents casual access by users without password knowledge
+- Prevents accidental password exposure in code reviews or logs
+- Provides basic access control for developer-only features
+
+**Security Considerations**:
+- This is local application protection, not enterprise-grade security
+- Hash is visible in code to anyone with code access
+- Strong passwords recommended for better protection
+- Suitable for preventing casual access, not determined attackers
+
+**Code Protection Methods**:
+
+1. **Compile to Executable** (Recommended):
+   - Use AutoHotkey compiler (Ahk2Exe) to compile `.ahk` files to `.exe`
+   - Makes source code less accessible (but still reversible with tools)
+   - Prevents casual users from easily viewing/modifying code
+   - Users would need decompilation tools to access source
+
+2. **Code Obfuscation**:
+   - Use AutoHotkey obfuscation tools to make code harder to read
+   - Renames variables/functions to meaningless names
+   - Makes reverse engineering more difficult but not impossible
+
+3. **Integrity Checks**:
+   - Verify file hasn't been modified (checksums, digital signatures)
+   - Exit if code integrity check fails
+   - Prevents simple modifications but can be bypassed
+
+4. **Server-Side Authentication** (Only Real Solution):
+   - Move password verification to remote server
+   - Application checks with server before granting access
+   - Only truly secure method, but requires server infrastructure
+
+**Limitations**:
+- Anyone with executable can use decompilers to extract source
+- Determined attackers can always bypass local protection
+- Compiled executables can be reverse-engineered
+- For maximum security, use server-side authentication
+
+### Usage Instructions
+
+**Setting Up Password**:
+1. Run `GeneratePasswordHash.ahk` or `StartHashGenerator.bat`
+2. Enter desired password
+3. Click "Generate Hash"
+4. Copy the generated hash
+5. Open `DeveloperModule.ahk`
+6. Find `PASSWORD_HASH` variable
+7. Replace hash value with copied hash
+8. Save file
+
+**Accessing Developer Module**:
+1. Launch DClient Hub
+2. Click "Developer Module" button
+3. Enter password when prompted
+4. If correct, access granted to developer interface
+
+**Changing Password**:
+1. Generate new hash using `GeneratePasswordHash.ahk` (this requires a true developer key in order to access)
+2. Replace `PASSWORD_HASH` value in `DeveloperModule.ahk`
+3. Save file
+
+### Default Configuration
+
+**Default Password**:
+- Default hash corresponds to empty password
+- Change immediately after first use
+- Use `GeneratePasswordHash.ahk` to set new password
+
+### Important Notes
+
+Attempting to access the developer module with the incorrect password 5 itmes will lock you out and require the lead developer to reset your attempts. 
+Attempting to decrypt passwords may be allowed but if attempts to result in failure, we will not reset your attempts.
+Attempting to bruteforce your entry will be detected and prevented, and we will not reset your attempts.
+The decryption was written by hand and is unique to any other encoding method, and should be relatively hard to access. 
+YOU ARE ALLOWED TO USE MODULE 1 if you manage to gain access to it which proves to us you have the advanced understanding in what you are doing and that we can trust you to be responsible.
+---
+
+## Module 3 (CSS) - CSS Editor
+
+### Purpose
+Module 3 provides a visual CSS editor with validation, history tracking, and integration with the web server.
+
+### Files
+
+#### `CSSEditor.ahk`
+**Purpose**: CSS editing GUI application
+
+**Features**:
+- **CSS Text Box**: Large text area for editing CSS content
+- **Send Button**: Validates and saves CSS to `CSSContent.ahk`
+- **Always On Top**: Checkbox to keep window above other windows
+- **Close Button**: Closes the CSS editor
+- **CSS Validation**: Validates CSS before saving
+- **Edit History**: Saves each successful edit as timestamped file in `data/` folder
+- **Settings Persistence**: Always On Top preference saved to config
+
+**Window Properties**:
+- Width: 800px
+- Height: 600px
+- Dark theme with custom skinning
+- Draggable title bar
+- Monospace font (Consolas) for code editing
+
+**CSS Validation**:
+The `ValidateCSS()` function performs:
+1. **Empty Check**: Ensures CSS content is not empty
+2. **Rule Presence**: Verifies at least one CSS rule exists (contains `{}`, `:`, or `;`)
+3. **Brace Balance**: Checks that opening/closing braces are properly matched
+
+**Validation Errors**:
+- "CSS content cannot be empty"
+- "Invalid CSS: No CSS rules found"
+- "Invalid CSS: Unmatched closing brace }"
+- "Invalid CSS: Unclosed brace(s)"
+
+**CSS Content Loading**:
+- Reads from `Module 13 (Webserve)/subscripts/CSSContent.ahk`
+- Supports multiple AutoHotkey continuation section formats:
+  - `cssContent := "`n`n(`n...content...`)"`
+  - `cssContent := "`n(`n...content...`)"`
+  - `cssContent := "...content..."`
+
+**CSS Content Saving**:
+- Writes to `Module 13 (Webserve)/subscripts/CSSContent.ahk`
+- Format: AutoHotkey continuation section with proper escaping
+- Updates web server's CSS content immediately
+
+**Edit History**:
+- Each successful "Send" creates a new file in `Module 3 (CSS)/data/`
+- Filename format: `yyyy-MM-dd_HH-mm-ss.css`
+- Contains the CSS content that was saved
+- Provides complete audit trail of all edits
+
+**Logging**:
+- All actions logged to `Module 13 (Webserve)/subscripts/config/logs.txt`
+- Uses `LogMessage()` function for Module 13 logs
+- Uses `LogError()` and `LogImportantMessage()` for centralized error log
+
+**Configuration**:
+- Settings file: `Module 13 (Webserve)/subscripts/config/csseditor_settings.ini`
+- Section: `[Window]`
+- Key: `AlwaysOnTop` (values: "0" or "1")
+
+**Dependencies**:
+- `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
+- `Module 13 (Webserve)/subscripts/CSSContent.ahk` - For CSS content storage
+- `Module 13 (Webserve)/subscripts/config/logs.txt` - For action logging
+
+**Directory Structure**:
+```
+Module 3 (CSS)/
+├── CSSEditor.ahk
+├── StartCSSEditor.bat
+└── data/
+    ├── 2024-01-15_14-30-25.css
+    ├── 2024-01-15_14-35-10.css
+    └── ...
+```
+
+---
+
+## Module 4 (JS) - JavaScript Editor
+
+### Purpose
+Module 4 provides a visual JavaScript editor with validation, history tracking, and integration with the web server.
+
+### Files
+
+#### `JSEditor.ahk`
+**Purpose**: JavaScript editing GUI application
+
+**Features**:
+- **JavaScript Text Box**: Large text area for editing JavaScript content
+- **Send Button**: Validates and saves JavaScript to `JSContent.ahk`
+- **Always On Top**: Checkbox to keep window above other windows
+- **Close Button**: Closes the JavaScript editor
+- **JavaScript Validation**: Validates JavaScript before saving
+- **Edit History**: Saves each successful edit as timestamped file in `data/` folder
+- **Settings Persistence**: Always On Top preference saved to config
+
+**Window Properties**:
+- Width: 800px
+- Height: 600px
+- Dark theme with custom skinning
+- Draggable title bar
+- Monospace font (Consolas) for code editing
+
+**JavaScript Validation**:
+The `ValidateJS()` function performs:
+1. **Empty Check**: Ensures JavaScript content is not empty
+2. **Brace Balance**: Checks that opening/closing braces `{}` are properly matched
+3. **Parenthesis Balance**: Checks that opening/closing parentheses `()` are properly matched
+4. **Bracket Balance**: Checks that opening/closing brackets `[]` are properly matched
+
+**Validation Errors**:
+- "JavaScript content cannot be empty"
+- "Invalid JavaScript: Unmatched closing brace }"
+- "Invalid JavaScript: Unclosed brace(s)"
+- "Invalid JavaScript: Unmatched closing parenthesis )"
+- "Invalid JavaScript: Unclosed parenthesis/parentheses"
+- "Invalid JavaScript: Unmatched closing bracket ]"
+- "Invalid JavaScript: Unclosed bracket(s)"
+
+**JavaScript Content Loading**:
+- Reads from `Module 13 (Webserve)/subscripts/JSContent.ahk`
+- Supports multiple AutoHotkey continuation section formats:
+  - `jsContent := "`n`n(`n...content...`)"`
+  - `jsContent := "`n(`n...content...`)"`
+  - `jsContent := "...content..."`
+
+**JavaScript Content Saving**:
+- Writes to `Module 13 (Webserve)/subscripts/JSContent.ahk`
+- Format: AutoHotkey continuation section with proper escaping
+- Updates web server's JavaScript content immediately
+
+**Edit History**:
+- Each successful "Send" creates a new file in `Module 4 (JS)/data/`
+- Filename format: `yyyy-MM-dd_HH-mm-ss.js`
+- Contains the JavaScript content that was saved
+- Provides complete audit trail of all edits
+
+**Logging**:
+- All actions logged to `Module 13 (Webserve)/subscripts/config/logs.txt`
+- Uses `LogMessage()` function for Module 13 logs
+- Uses `LogError()` and `LogImportantMessage()` for centralized error log
+
+**Configuration**:
+- Settings file: `Module 13 (Webserve)/subscripts/config/jseditor_settings.ini`
+- Section: `[Window]`
+- Key: `AlwaysOnTop` (values: "0" or "1")
+
+**Dependencies**:
+- `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
+- `Module 13 (Webserve)/subscripts/JSContent.ahk` - For JavaScript content storage
+- `Module 13 (Webserve)/subscripts/config/logs.txt` - For action logging
+
+**Directory Structure**:
+```
+Module 4 (JS)/
+├── JSEditor.ahk
+├── StartJSEditor.bat
+└── data/
+    ├── 2024-01-15_14-30-25.js
+    ├── 2024-01-15_14-35-10.js
+    └── ...
+```
+
+---
+
+## Module 6 (Config) - Configuration Manager
+
+### Purpose
+Module 6 provides a centralized interface for viewing, exporting, importing, and managing all DClient module configuration files.
+
+### Files
+
+#### `ConfigManager.ahk`
+**Purpose**: Configuration management GUI application
+
+**Features**:
+- **Settings Display**: Shows all module settings in a read-only text view
+- **Refresh Button**: Reloads settings from all configuration files
+- **Export All Button**: Exports all configuration files to a single text file
+- **Import Button**: Imports settings from a previously exported configuration file
+- **Reset All Button**: Deletes all configuration files to restore defaults
+- **Settings Persistence**: No local settings (read-only viewer)
+
+**Window Properties**:
+- Width: 500px
+- Height: 500px
+- Dark theme with custom skinning
+- Draggable title bar
+- Read-only text display
+
+**Managed Configuration Files**:
+- `Module 0 (Main)/hub_settings.ini` - DClient Hub settings
+- `Module 11 (Errors)/errorviewer_settings.ini` - Error Viewer settings
+- `Module 13 (Webserve)/subscripts/config/settings.ini` - Web Server settings
+- `Module 13 (Webserve)/subscripts/config/htmleditor_settings.ini` - HTML Editor settings
+- `Module 13 (Webserve)/subscripts/config/csseditor_settings.ini` - CSS Editor settings
+- `Module 13 (Webserve)/subscripts/config/jseditor_settings.ini` - JS Editor settings
+
+**Export Format**:
+- Text file with timestamp: `config_export_yyyy-MM-dd_HH-mm-ss.txt`
+- Contains module name, config file path, Always On Top setting, and full file contents
+- Separated by 60-character separator lines
+
+**Import Functionality**:
+- Reads exported configuration files
+- Parses and restores individual INI files
+- Creates directories if needed
+- Shows confirmation with number of files restored
+- Requires user confirmation before overwriting
+
+**Reset Functionality**:
+- Deletes all configuration files
+- Requires user confirmation
+- Shows count of deleted files
+- All modules will use defaults on next launch
+
+**Dependencies**:
+- `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
+
+**Directory Structure**:
+```
+Module 6 (Config)/
+├── ConfigManager.ahk
+├── StartConfigManager.bat
+└── config/
+    └── config_manager.ini (if created)
+```
+
+---
+
+## Module 10 (Backup) - Backup Manager
+
+### Purpose
+Module 10 provides a backup and restore system for DClient configuration files and content files.
+
+### Files
+
+#### `BackupManager.ahk`
+**Purpose**: Backup and restore GUI application
+
+**Features**:
+- **Backup List**: Displays all available backups with timestamps
+- **Create Backup Button**: Creates a new backup of all config and content files
+- **Restore Button**: Restores selected backup (overwrites current files)
+- **Delete Button**: Deletes selected backup
+- **Refresh Button**: Reloads backup list
+
+**Window Properties**:
+- Width: 600px
+- Height: 500px
+- Dark theme with custom skinning
+- Draggable title bar
+- List box for backup selection
+
+**Backup Contents**:
+Each backup includes:
+- `hub_settings.ini` - DClient Hub settings
+- `errorviewer_settings.ini` - Error Viewer settings
+- `webserver_settings.ini` - Web Server settings
+- `htmleditor_settings.ini` - HTML Editor settings
+- `csseditor_settings.ini` - CSS Editor settings
+- `jseditor_settings.ini` - JS Editor settings
+- `HTMLContent.ahk` - HTML content
+- `CSSContent.ahk` - CSS content
+- `JSContent.ahk` - JavaScript content
+- `backup_info.txt` - Backup metadata (timestamp, file count)
+
+**Backup Storage**:
+- Backups stored in `Module 10 (Backup)/backups/`
+- Directory format: `backup_yyyy-MM-dd_HH-mm-ss`
+- Each backup is a separate directory
+- Backups sorted by date (newest first)
+
+**Restore Process**:
+1. User selects backup from list
+2. Confirmation dialog shown
+3. Files copied from backup directory to original locations
+4. Directories created if needed
+5. Confirmation shown with number of files restored
+6. User advised to restart affected modules
+
+**Backup Creation**:
+- Creates timestamped backup directory
+- Copies all config and content files
+- Creates backup info file
+- Shows confirmation with backup name and file count
+
+**Dependencies**:
+- `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
+
+**Directory Structure**:
+```
+Module 10 (Backup)/
+├── BackupManager.ahk
+├── StartBackupManager.bat
+└── backups/
+    ├── backup_2024-01-15_14-30-25/
+    │   ├── backup_info.txt
+    │   ├── hub_settings.ini
+    │   ├── HTMLContent.ahk
+    │   └── ...
+    └── backup_2024-01-15_15-45-10/
+        └── ...
+```
 
 ---
 
@@ -390,6 +897,8 @@ Module 13 provides a web server for local development and a control panel for ma
 **Dependencies**:
 - `lib/WebServe.ahk` - Web server library
 - `HTMLContent.ahk` - HTML content source
+- `CSSContent.ahk` - CSS content source (optional)
+- `JSContent.ahk` - JavaScript content source (optional)
 - `Module 11 (Errors)/ErrorLogger.ahk` - For error logging
 - `image_assets/Styles/` - UI skinning assets
 
@@ -420,12 +929,34 @@ htmlContent := "`n`n
 - Updated by `HTMLEditor.ahk` when user saves HTML
 - Uses AutoHotkey continuation section for multi-line strings
 
+#### `CSSContent.ahk`
+**Purpose**: Stores CSS content (optional, created by CSS Editor)
+
+**Format**: Same as HTMLContent.ahk but stores CSS
+
+**Usage**:
+- Created and updated by `CSSEditor.ahk` when user saves CSS
+- Can be integrated into web server's HTML output
+- Uses AutoHotkey continuation section for multi-line strings
+
+#### `JSContent.ahk`
+**Purpose**: Stores JavaScript content (optional, created by JS Editor)
+
+**Format**: Same as HTMLContent.ahk but stores JavaScript
+
+**Usage**:
+- Created and updated by `JSEditor.ahk` when user saves JavaScript
+- Can be integrated into web server's HTML output
+- Uses AutoHotkey continuation section for multi-line strings
+
 **Directory Structure**:
 ```
 Module 13 (Webserve)/
 └── subscripts/
     ├── GlobalStart.ahk
     ├── HTMLContent.ahk
+    ├── CSSContent.ahk (optional)
+    ├── JSContent.ahk (optional)
     ├── lib/
     │   └── WebServe.ahk
     ├── config/
@@ -449,6 +980,11 @@ Module 13 (Webserve)/
 DClientHub.ahk
 ├── ErrorLogger.ahk (Module 11)
 └── Launches:
+    ├── DeveloperModule.ahk (Module 1)
+    ├── CSSEditor.ahk (Module 3)
+    ├── JSEditor.ahk (Module 4)
+    ├── ConfigManager.ahk (Module 6)
+    ├── BackupManager.ahk (Module 10)
     ├── HTMLEditor.ahk (Module 12)
     ├── GlobalStart.ahk (Module 13)
     └── ErrorViewer.ahk (Module 11)
@@ -458,10 +994,28 @@ HTMLEditor.ahk
 ├── HTMLContent.ahk (Module 13)
 └── logs.txt (Module 13)
 
+CSSEditor.ahk
+├── ErrorLogger.ahk (Module 11)
+├── CSSContent.ahk (Module 13)
+└── logs.txt (Module 13)
+
+JSEditor.ahk
+├── ErrorLogger.ahk (Module 11)
+├── JSContent.ahk (Module 13)
+└── logs.txt (Module 13)
+
+ConfigManager.ahk
+└── ErrorLogger.ahk (Module 11)
+
+BackupManager.ahk
+└── ErrorLogger.ahk (Module 11)
+
 GlobalStart.ahk
 ├── ErrorLogger.ahk (Module 11)
 ├── WebServe.ahk (Module 13/lib)
 ├── HTMLContent.ahk (Module 13)
+├── CSSContent.ahk (Module 13)
+├── JSContent.ahk (Module 13)
 └── UI assets (Module 13/image_assets)
 
 ErrorViewer.ahk
@@ -470,9 +1024,12 @@ ErrorViewer.ahk
 
 ### Critical Files
 - **ErrorLogger.ahk**: Required by all modules for logging
-- **HTMLContent.ahk**: Required by both HTMLEditor and GlobalStart
+- **HTMLContent.ahk**: Required by HTMLEditor and GlobalStart
+- **CSSContent.ahk**: Required by CSSEditor and GlobalStart
+- **JSContent.ahk**: Required by JSEditor and GlobalStart
 - **WebServe.ahk**: Required by GlobalStart for web server functionality
 - **UI Assets**: Required for consistent theming across all GUIs
+- **DeveloperModule.ahk**: Optional password-protected developer module
 
 ---
 
@@ -490,6 +1047,25 @@ ErrorViewer.ahk
 - **`error_log.txt`**
   - Centralized error, warning, and info log
   - Format: `[timestamp] [LEVEL] [Module] Context: Message | Details: details`
+
+### Module 3 (CSS)
+- **`csseditor_settings.ini`** (in Module 13 config directory)
+  - Section: `[Window]`
+  - Key: `AlwaysOnTop` ("0" or "1")
+
+### Module 4 (JS)
+- **`jseditor_settings.ini`** (in Module 13 config directory)
+  - Section: `[Window]`
+  - Key: `AlwaysOnTop` ("0" or "1")
+
+### Module 6 (Config)
+- **`config_manager.ini`** (optional, in Module 6 config directory)
+  - Currently unused, reserved for future settings
+
+### Module 10 (Backup)
+- **`backups/`** directory
+  - Contains timestamped backup directories
+  - Each backup includes config files and content files
 
 ### Module 12 (HTML)
 - **`htmleditor_settings.ini`** (in Module 13 config directory)
@@ -546,6 +1122,104 @@ ErrorViewer.ahk
 4. **View Edit History**:
    - Navigate to `Module 12 (HTML)/data/`
    - Each file is timestamped with the HTML content at that time
+
+### Using the CSS Editor
+
+1. **Open CSS Editor**:
+   - Click "CSS Editor" button in DClient Hub
+   - Or launch `Module 3 (CSS)/CSSEditor.ahk` directly
+
+2. **Edit CSS**:
+   - CSS content loads automatically from `CSSContent.ahk` (if exists)
+   - Edit CSS in the text box
+   - Use "Always On Top" checkbox if needed
+
+3. **Save CSS**:
+   - Click "Send" button
+   - CSS is validated automatically (checks for braces matching)
+   - If valid, saves to `CSSContent.ahk` and creates history file
+   - If invalid, shows error message
+
+4. **View Edit History**:
+   - Navigate to `Module 3 (CSS)/data/`
+   - Each file is timestamped with the CSS content at that time
+
+### Using the JavaScript Editor
+
+1. **Open JavaScript Editor**:
+   - Click "JavaScript Editor" button in DClient Hub
+   - Or launch `Module 4 (JS)/JSEditor.ahk` directly
+
+2. **Edit JavaScript**:
+   - JavaScript content loads automatically from `JSContent.ahk` (if exists)
+   - Edit JavaScript in the text box
+   - Use "Always On Top" checkbox if needed
+
+3. **Save JavaScript**:
+   - Click "Send" button
+   - JavaScript is validated automatically (checks braces, parentheses, brackets)
+   - If valid, saves to `JSContent.ahk` and creates history file
+   - If invalid, shows error message
+
+4. **View Edit History**:
+   - Navigate to `Module 4 (JS)/data/`
+   - Each file is timestamped with the JavaScript content at that time
+
+### Using the Configuration Manager
+
+1. **Open Config Manager**:
+   - Click "Config Manager" button in DClient Hub
+   - Or launch `Module 6 (Config)/ConfigManager.ahk` directly
+
+2. **View Settings**:
+   - All module settings displayed in read-only view
+   - Shows module name, Always On Top setting, and config file path
+   - Click "Refresh" to reload settings
+
+3. **Export Settings**:
+   - Click "Export All" button
+   - Settings exported to timestamped text file in Module 6 directory
+   - File contains all configuration files and their contents
+
+4. **Import Settings**:
+   - Click "Import" button
+   - Select previously exported configuration file
+   - Confirm import (will overwrite current settings)
+   - Settings restored from export file
+
+5. **Reset Settings**:
+   - Click "Reset All" button
+   - Confirm reset (will delete all config files)
+   - All modules will use defaults on next launch
+
+### Using the Backup Manager
+
+1. **Open Backup Manager**:
+   - Click "Backup Manager" button in DClient Hub
+   - Or launch `Module 10 (Backup)/BackupManager.ahk` directly
+
+2. **Create Backup**:
+   - Click "Create Backup" button
+   - Backup created with timestamp
+   - Includes all config files and content files (HTML, CSS, JS)
+   - Shows confirmation with backup name and file count
+
+3. **Restore Backup**:
+   - Select backup from list
+   - Click "Restore" button
+   - Confirm restore (will overwrite current files)
+   - Files restored from backup
+   - Restart affected modules for changes to take effect
+
+4. **Delete Backup**:
+   - Select backup from list
+   - Click "Delete" button
+   - Confirm deletion
+   - Backup directory deleted
+
+5. **Refresh List**:
+   - Click "Refresh" button to reload backup list
+   - Backups sorted by date (newest first)
 
 ### Using the Web Server
 
@@ -706,10 +1380,13 @@ ErrorViewer.ahk
 
 ### Known Limitations
 - **HTML Validation**: Basic validation only, not full HTML5 parser
+- **CSS Validation**: Basic validation only (brace matching), not full CSS parser
+- **JavaScript Validation**: Basic validation only (syntax matching), not full JS parser
 - **Single Server Instance**: Only one server instance can run
 - **Port Hardcoded**: Port 8080 cannot be changed without code modification
 - **No HTTPS**: Web server only supports HTTP
 - **Windows Only**: AutoHotkey is Windows-only
+- **Content Integration**: CSS and JS content files are created but not automatically integrated into HTML output
 
 ### Future Enhancement Possibilities
 - Configurable server port
@@ -734,6 +1411,22 @@ ErrorViewer.ahk
 ### HTML Editor Can't Load Content
 - **Check**: `HTMLContent.ahk` exists in Module 13 subscripts
 - **Solution**: Ensure file exists and is readable
+
+### CSS Editor Can't Load Content
+- **Check**: `CSSContent.ahk` exists in Module 13 subscripts (optional)
+- **Solution**: File is created automatically on first save, or start with empty content
+
+### JavaScript Editor Can't Load Content
+- **Check**: `JSContent.ahk` exists in Module 13 subscripts (optional)
+- **Solution**: File is created automatically on first save, or start with empty content
+
+### Config Manager Import Fails
+- **Check**: Export file format is correct
+- **Solution**: Use files exported by Config Manager, ensure file is not corrupted
+
+### Backup Manager Can't Restore
+- **Check**: Backup directory exists and contains files
+- **Solution**: Verify backup directory structure, check file permissions
 
 ### Web Server Won't Start
 - **Check**: Port 8080 not in use, cooldown timer expired
@@ -783,9 +1476,11 @@ ErrorViewer.ahk
 - **Date**: 2024-01-15 (approximate)
 - **Features**: 
   - Centralized error logging
-  - HTML editor with validation
+  - HTML, CSS, and JavaScript editors with validation
   - Web server control panel
   - Hub for module management
+  - Configuration manager with import/export
+  - Backup and restore system
   - Settings persistence
   - Window position saving
   - Always On Top option
@@ -910,10 +1605,16 @@ For issues, questions, or contributions, refer to the project repository or docu
 **Solutions**:
 - **Manual Close**: Close windows manually if hub fails
 - **Check Window Titles**: Verify window titles match expected names:
-  - "HTML Editor"
-  - "Web Server Control Panel"
-  - "Web Server Control Logs"
-  - "DClient Error Viewer"
+    - "HTML Editor"
+    - "CSS Editor"
+    - "JavaScript Editor"
+    - "Web Server Control Panel"
+    - "Web Server Control Logs"
+    - "DClient Error Viewer"
+    - "Developer Module"
+    - "Developer Module - Password Required"
+    - "Configuration Manager"
+    - "Backup Manager"
 - **Task Manager**: Use Task Manager to end AutoHotkey processes if stuck
 - **Restart**: Restart the application if windows become unresponsive
 

@@ -1,18 +1,22 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-; Include centralized error logger
 #Include "..\Module 11 (Errors)\ErrorLogger.ahk"
 
 htmlEditorPath := A_ScriptDir . "\..\Module 12 (HTML)\HTMLEditor.ahk"
+cssEditorPath := A_ScriptDir . "\..\Module 3 (CSS)\CSSEditor.ahk"
+jsEditorPath := A_ScriptDir . "\..\Module 4 (JS)\JSEditor.ahk"
 globalStartPath := A_ScriptDir . "\..\Module 13 (Webserve)\subscripts\GlobalStart.ahk"
 logFile := A_ScriptDir . "\..\Module 13 (Webserve)\subscripts\config\logs.txt"
 errorViewerPath := A_ScriptDir . "\..\Module 11 (Errors)\ErrorViewer.ahk"
+developerModulePath := A_ScriptDir . "\..\Module 1 (Developer Only!)\DeveloperModule.ahk"
+configManagerPath := A_ScriptDir . "\..\Module 6 (Config)\ConfigManager.ahk"
+backupManagerPath := A_ScriptDir . "\..\Module 10 (Backup)\BackupManager.ahk"
 configFile := A_ScriptDir . "\hub_settings.ini"
 
 alwaysOnTop := false
 guiWidth := 400
-guiHeight := 550
+guiHeight := 750
 titleBarHeight := 32
 buttonHeight := 40
 buttonSpacing := 15
@@ -118,6 +122,40 @@ LaunchHTMLEditor(*) {
     }
 }
 
+LaunchCSSEditor(*) {
+    global cssEditorPath
+    
+    try {
+        if FileExist(cssEditorPath) {
+            Run('"' . cssEditorPath . '"')
+        } else {
+            LogError("DClientHub", "LaunchCSSEditor", "File not found", cssEditorPath)
+            MsgBox("CSS Editor not found at: " . cssEditorPath, "Error", 0x10)
+        }
+    } catch as err {
+        errorMsg := SafeGetErrorMessage(err)
+        LogError("DClientHub", "LaunchCSSEditor", errorMsg, cssEditorPath)
+        MsgBox("Error launching CSS Editor: " . errorMsg, "Error", 0x10)
+    }
+}
+
+LaunchJSEditor(*) {
+    global jsEditorPath
+    
+    try {
+        if FileExist(jsEditorPath) {
+            Run('"' . jsEditorPath . '"')
+        } else {
+            LogError("DClientHub", "LaunchJSEditor", "File not found", jsEditorPath)
+            MsgBox("JS Editor not found at: " . jsEditorPath, "Error", 0x10)
+        }
+    } catch as err {
+        errorMsg := SafeGetErrorMessage(err)
+        LogError("DClientHub", "LaunchJSEditor", errorMsg, jsEditorPath)
+        MsgBox("Error launching JS Editor: " . errorMsg, "Error", 0x10)
+    }
+}
+
 LaunchGlobalStart(*) {
     global globalStartPath
     
@@ -168,12 +206,69 @@ LaunchErrorViewer(*) {
     }
 }
 
+LaunchDeveloperModule(*) {
+    global developerModulePath
+    
+    try {
+        if FileExist(developerModulePath) {
+            Run('"' . developerModulePath . '"')
+        } else {
+            LogError("DClientHub", "LaunchDeveloperModule", "File not found", developerModulePath)
+            MsgBox("Developer Module not found at: " . developerModulePath, "Error", 0x10)
+        }
+    } catch as err {
+        errorMsg := SafeGetErrorMessage(err)
+        LogError("DClientHub", "LaunchDeveloperModule", errorMsg, developerModulePath)
+        MsgBox("Error launching Developer Module: " . errorMsg, "Error", 0x10)
+    }
+}
+
+LaunchConfigManager(*) {
+    global configManagerPath
+    
+    try {
+        if FileExist(configManagerPath) {
+            Run('"' . configManagerPath . '"')
+        } else {
+            LogError("DClientHub", "LaunchConfigManager", "File not found", configManagerPath)
+            MsgBox("Config Manager not found at: " . configManagerPath, "Error", 0x10)
+        }
+    } catch as err {
+        errorMsg := SafeGetErrorMessage(err)
+        LogError("DClientHub", "LaunchConfigManager", errorMsg, configManagerPath)
+        MsgBox("Error launching Config Manager: " . errorMsg, "Error", 0x10)
+    }
+}
+
+LaunchBackupManager(*) {
+    global backupManagerPath
+    
+    try {
+        if FileExist(backupManagerPath) {
+            Run('"' . backupManagerPath . '"')
+        } else {
+            LogError("DClientHub", "LaunchBackupManager", "File not found", backupManagerPath)
+            MsgBox("Backup Manager not found at: " . backupManagerPath, "Error", 0x10)
+        }
+    } catch as err {
+        errorMsg := SafeGetErrorMessage(err)
+        LogError("DClientHub", "LaunchBackupManager", errorMsg, backupManagerPath)
+        MsgBox("Error launching Backup Manager: " . errorMsg, "Error", 0x10)
+    }
+}
+
 CloseAllDClientWindows() {
     windowTitles := [
         "HTML Editor",
+        "CSS Editor",
+        "JavaScript Editor",
         "Web Server Control Panel",
         "Web Server Control Logs",
-        "DClient Error Viewer"
+        "DClient Error Viewer",
+        "Developer Module",
+        "Developer Module - Password Required",
+        "Configuration Manager",
+        "Backup Manager"
     ]
     
     Loop windowTitles.Length {
@@ -212,6 +307,16 @@ htmlEditorBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
 htmlEditorBtn.OnEvent("Click", LaunchHTMLEditor)
 currentY += buttonHeight + buttonSpacing
 
+cssEditorBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "CSS Editor")
+cssEditorBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
+cssEditorBtn.OnEvent("Click", LaunchCSSEditor)
+currentY += buttonHeight + buttonSpacing
+
+jsEditorBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "JavaScript Editor")
+jsEditorBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
+jsEditorBtn.OnEvent("Click", LaunchJSEditor)
+currentY += buttonHeight + buttonSpacing
+
 globalStartBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "Web Server Control")
 globalStartBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
 globalStartBtn.OnEvent("Click", LaunchGlobalStart)
@@ -225,6 +330,21 @@ currentY += buttonHeight + buttonSpacing
 errorViewerBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "Error Viewer")
 errorViewerBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
 errorViewerBtn.OnEvent("Click", LaunchErrorViewer)
+currentY += buttonHeight + buttonSpacing
+
+developerModuleBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "Developer Module")
+developerModuleBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
+developerModuleBtn.OnEvent("Click", LaunchDeveloperModule)
+currentY += buttonHeight + buttonSpacing
+
+configManagerBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "Config Manager")
+configManagerBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
+configManagerBtn.OnEvent("Click", LaunchConfigManager)
+currentY += buttonHeight + buttonSpacing
+
+backupManagerBtn := mainGui.AddButton("x20 y" . currentY . " w" . (guiWidth - 40) . " h" . buttonHeight, "Backup Manager")
+backupManagerBtn.SetFont("s10 Bold cFFFFFF", "Segoe UI")
+backupManagerBtn.OnEvent("Click", LaunchBackupManager)
 currentY += buttonHeight + buttonSpacing
 
 separator2 := mainGui.AddText("x10 y" . (currentY + 10) . " w" . (guiWidth - 20) . " h1", "")
