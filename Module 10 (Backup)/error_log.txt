@@ -1,0 +1,16 @@
+﻿[2025-11-27 01:05:03] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2025-11-27 01:05:03] [INFO] [BackupManager] ApplicationStart: Backup Manager window opened
+[2025-11-27 01:05:07] [INFO] [BackupManager] CreateBackup: Backup created | Details: backup_2025-11-27_01-05-06
+[2025-11-27 01:05:07] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2025-11-27 01:05:13] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2025-11-27 01:05:13] [INFO] [BackupManager] ApplicationStart: Backup Manager window opened
+[2026-01-17 23:53:10] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2026-01-17 23:53:10] [INFO] [BackupManager] ApplicationStart: Backup Manager window opened
+[2026-01-17 23:53:18] [INFO] [BackupManager] CreateBackup: Backup created | Details: backup_2026-01-17_23-53-16
+[2026-01-17 23:53:18] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2026-01-17 23:53:25] [INFO] [BackupManager] RestoreBackup: Backup restored | Details: backup_2025-11-27_01-05-06
+[2026-01-17 23:53:31] [INFO] [BackupManager] RestoreBackup: Backup restored | Details: backup_2026-01-17_23-53-16
+[2026-01-17 23:53:37] [INFO] [BackupManager] DeleteBackup: Backup deleted | Details: backup_2026-01-17_23-53-16
+[2026-01-17 23:53:37] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed
+[2026-01-17 23:53:41] [INFO] [BackupManager] DeleteBackup: Backup deleted | Details: backup_2025-11-27_01-05-06
+[2026-01-17 23:53:41] [INFO] [BackupManager] RefreshBackupList: Backup list refreshed

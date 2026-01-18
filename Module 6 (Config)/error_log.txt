@@ -1,0 +1,15 @@
+﻿[2026-01-17 23:48:58] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:48:58] [INFO] [ConfigManager] ApplicationStart: Configuration Manager window opened
+[2026-01-17 23:49:04] [INFO] [ConfigManager] ResetSettings: Settings reset | Details: Deleted 4 files
+[2026-01-17 23:49:04] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:53:05] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:53:05] [INFO] [ConfigManager] ApplicationStart: Configuration Manager window opened
+[2026-01-17 23:53:09] [INFO] [ConfigManager] ResetSettings: Settings reset | Details: Deleted 1 files
+[2026-01-17 23:53:09] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:54:00] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:54:00] [INFO] [ConfigManager] ApplicationStart: Configuration Manager window opened
+[2026-01-17 23:54:02] [INFO] [ConfigManager] ApplicationClose: Configuration Manager window closed
+[2026-01-17 23:54:07] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
+[2026-01-17 23:54:07] [INFO] [ConfigManager] ApplicationStart: Configuration Manager window opened
+[2026-01-17 23:54:11] [INFO] [ConfigManager] ResetSettings: Settings reset | Details: Deleted 5 files
+[2026-01-17 23:54:11] [INFO] [ConfigManager] RefreshSettings: Settings refreshed
